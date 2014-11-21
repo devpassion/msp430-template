@@ -1,0 +1,4 @@
+[General]
+Name=MSP430 Application
+Comment=A cross comiling application for msp430 
+Category=Embedded/MSP430
