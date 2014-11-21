@@ -41,12 +41,33 @@ else()
   message(STATUS "MCU defined as '${MCU}'")
 endif()
 
-set(CMAKE_CXX_FLAGS "-std=c++0x -mmcu=${MCU} -Os -g -ffunction-sections -fdata-sections" CACHE STRING "C++ Flags")
+set(CMAKE_CXX_FLAGS " -Wall -std=c++0x -mmcu=${MCU} -Os -g -ffunction-sections -fdata-sections" CACHE STRING "C++ Flags")
 set(CMAKE_CXX_LINK_FLAGS "-Wl,-gc-sections" CACHE STRING "Linker Flags")
 
-set(CMAKE_C_FLAGS "-mmcu=${MCU} -Os -g -ffunction-sections -fdata-sections" CACHE STRING "C Flags")
+set(CMAKE_C_FLAGS "-Wall -mmcu=${MCU} -Os -g -ffunction-sections -fdata-sections" CACHE STRING "C Flags")
 set(CMAKE_C_LINK_FLAGS "-Wl,-gc-sections" CACHE STRING "Linker Flags")
 
 # Use GCC for linking executables to avoid linking to stdlibc++ _BUT_ get all the math libraries etc.
 set(CMAKE_CXX_LINK_EXECUTABLE
   "<CMAKE_C_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> ${CMAKE_GNULD_IMAGE_VERSION} <LINK_LIBRARIES>")
+
+  
+  
+macro(add_objcopy_target )
+    add_custom_target( objcopy ALL 
+                        COMMAND MSP430_OBJCOPY -O ihex -R .eeprom  "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"  "${MSP430_EXECUTABLE_NAME}.hex" 
+                        DEPENDS "${MSP430_EXECUTABLE_NAME}"
+                        COMMENT "copy elf to hex..." VERBATIM
+                        )
+
+endmacro(add_objcopy_target)
+
+
+macro(add_objsize_target)
+    add_custom_target( objsize ALL 
+                        COMMAND MSP430_SIZE_TOOL "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"  "${MSP430_EXECUTABLE_NAME}.hex"
+                        DEPENDS objcopy
+                        COMMENT "Target size :" VERBATIM
+                        )
+endmacro(add_objsize_target)
+  
