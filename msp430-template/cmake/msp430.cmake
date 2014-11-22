@@ -55,7 +55,7 @@ set(CMAKE_CXX_LINK_EXECUTABLE
   
 macro(add_objcopy_target )
     add_custom_target( objcopy ALL 
-                        COMMAND MSP430_OBJCOPY -O ihex -R .eeprom  "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"  "${MSP430_EXECUTABLE_NAME}.hex" 
+                        COMMAND ${MSP430_OBJCOPY} -O ihex -R .eeprom  "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"  "${MSP430_EXECUTABLE_NAME}.hex" 
                         DEPENDS "${MSP430_EXECUTABLE_NAME}"
                         COMMENT "copy elf to hex..." VERBATIM
                         )
@@ -65,7 +65,7 @@ endmacro(add_objcopy_target)
 
 macro(add_objsize_target)
     add_custom_target( objsize ALL 
-                        COMMAND MSP430_SIZE_TOOL "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"  "${MSP430_EXECUTABLE_NAME}.hex"
+                        COMMAND ${MSP430_SIZE_TOOL} "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"  "${MSP430_EXECUTABLE_NAME}.hex"
                         DEPENDS objcopy
                         COMMENT "Target size :" VERBATIM
                         )

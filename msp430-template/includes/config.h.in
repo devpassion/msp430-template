@@ -1,0 +1,2 @@
+#define VERSION_MAJOR @msp430_devoir3_MAJOR@
+#define VERSION_MINOR @msp430_devoir3_MINOR@
