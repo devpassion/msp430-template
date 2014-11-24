@@ -41,10 +41,10 @@ else()
   message(STATUS "MCU defined as '${MCU}'")
 endif()
 
-set(CMAKE_CXX_FLAGS " -Wall -std=c++0x -mmcu=${MCU} -Os -g -ffunction-sections -fdata-sections" CACHE STRING "C++ Flags")
+set(CMAKE_CXX_FLAGS " -Wall -std=c++0x -mmcu=${MCU} -Os -ffunction-sections -fdata-sections" CACHE STRING "C++ Flags")
 set(CMAKE_CXX_LINK_FLAGS "-Wl,-gc-sections" CACHE STRING "Linker Flags")
 
-set(CMAKE_C_FLAGS "-Wall -mmcu=${MCU} -Os -g -ffunction-sections -fdata-sections" CACHE STRING "C Flags")
+set(CMAKE_C_FLAGS "-Wall -mmcu=${MCU} -Os -ffunction-sections -fdata-sections" CACHE STRING "C Flags")
 set(CMAKE_C_LINK_FLAGS "-Wl,-gc-sections" CACHE STRING "Linker Flags")
 
 # Use GCC for linking executables to avoid linking to stdlibc++ _BUT_ get all the math libraries etc.
@@ -70,4 +70,16 @@ macro(add_objsize_target)
                         COMMENT "Target size :" VERBATIM
                         )
 endmacro(add_objsize_target)
+
+# objdump -dSt leds.elf >leds.lst
+
+macro(add_objdump_target)
+#     add_custom_command( OUTPUT ${CMAKE_BINARY_DIR}/${MSP430_EXECUTABLE_NAME}.lst
+#                         COMMAND ${MSP430_OBJDUMP_TOOL} -d St "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"
+#                         DEPENDS ${MSP430_EXECUTABLE_NAME})
+    add_custom_target( objdump ALL 
+                        COMMAND ${MSP430_OBJDUMP} -dSt "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}" > ${MSP430_EXECUTABLE_NAME}.lst
+                        DEPENDS objcopy
+                        COMMENT "Add code dump " VERBATIM)
+endmacro(add_objdump_target)
   

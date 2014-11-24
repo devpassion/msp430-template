@@ -1,5 +1,5 @@
 set( CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/msp430.cmake )
-project(%{APPNAMEID})
+project(msp430-exercices-3)
 cmake_minimum_required(VERSION 2.8)
 
 ################################################ 
@@ -13,8 +13,8 @@ set(CONF_FREQUENCY_IN_HZ "1000000UL" CACHE STRING "CPU frequency used")
 
 # Executable version
 # =============
-set (%{APPNAMEID}_MAJOR 1)
-set (%{APPNAMEID}_MINOR 0)
+set (msp430-exercices-3_MAJOR 1)
+set (msp430-exercices-3_MINOR 0)
 # =============
 
 # Other variables
@@ -75,6 +75,7 @@ target_link_libraries(
 # =============
 add_objcopy_target()
 add_objsize_target()
+add_objdump_target()
 
                         
 
