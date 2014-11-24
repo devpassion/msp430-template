@@ -1,9 +1,9 @@
 set( CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/msp430.cmake )
-project(msp430-exercices-3)
+project(%{APPNAMEID})
 cmake_minimum_required(VERSION 2.8)
 
-################################################ 
-## 
+################################################
+##
 ## Configuration
 ## =============
 
@@ -13,8 +13,8 @@ set(CONF_FREQUENCY_IN_HZ "1000000UL" CACHE STRING "CPU frequency used")
 
 # Executable version
 # =============
-set (msp430-exercices-3_MAJOR 1)
-set (msp430-exercices-3_MINOR 0)
+set (%{APPNAMEID}_MAJOR 1)
+set (%{APPNAMEID}_MINOR 0)
 # =============
 
 # Other variables
@@ -33,11 +33,11 @@ add_definitions("-Wall -Wextra -DF_CPU=${CONF_FREQUENCY_IN_HZ}")
 
 ################################################
 ################################################
-## 
+##
 ## Implementation - do not modify for normal usage
 ## =============
 
-# 
+#
 # Filter files
 # =============
 configure_file (
@@ -77,5 +77,5 @@ add_objcopy_target()
 add_objsize_target()
 add_objdump_target()
 
-                        
+
 
