@@ -46,16 +46,17 @@ configure_file (
   )
 # =============
 
-# MSP430Lib
-add_subdirectory(msp430lib)
+# MSP430Lib - optionnel
+# add_subdirectory(msp430lib)
 
 # Sources
 add_subdirectory(src)
 
 # Includes files
 # =============
+include_directories( /usr/msp430/include )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/msp430lib/includes)
+# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/msp430lib/includes)
 # =============
 
 # executable linked to msp430Lib

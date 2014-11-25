@@ -15,6 +15,8 @@ find_program(MSP430_CXX msp430-g++)
 find_program(MSP430_OBJCOPY msp430-objcopy)
 find_program(MSP430_SIZE_TOOL msp430-size)
 find_program(MSP430_OBJDUMP msp430-objdump)
+find_program(MSP_DEBUG mspdebug)
+
 
 SET(CMAKE_SYSTEM_NAME Generic)
 SET(CMAKE_SYSTEM_VERSION 1)
@@ -41,7 +43,7 @@ else()
   message(STATUS "MCU defined as '${MCU}'")
 endif()
 
-set(CMAKE_CXX_FLAGS " -Wall -std=c++0x -mmcu=${MCU} -Os -ffunction-sections -fdata-sections" CACHE STRING "C++ Flags")
+set(CMAKE_CXX_FLAGS " -Wall -std=c++0x -mmcu=${MCU} -Os -ffunction-sections -fdata-sections -finline-functions-called-once -finline-functions -finline-small-functions" CACHE STRING "C++ Flags")
 set(CMAKE_CXX_LINK_FLAGS "-Wl,-gc-sections" CACHE STRING "Linker Flags")
 
 set(CMAKE_C_FLAGS "-Wall -mmcu=${MCU} -Os -ffunction-sections -fdata-sections" CACHE STRING "C Flags")
@@ -51,11 +53,11 @@ set(CMAKE_C_LINK_FLAGS "-Wl,-gc-sections" CACHE STRING "Linker Flags")
 set(CMAKE_CXX_LINK_EXECUTABLE
   "<CMAKE_C_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> ${CMAKE_GNULD_IMAGE_VERSION} <LINK_LIBRARIES>")
 
-  
-  
+
+
 macro(add_objcopy_target )
-    add_custom_target( objcopy ALL 
-                        COMMAND ${MSP430_OBJCOPY} -O ihex -R .eeprom  "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"  "${MSP430_EXECUTABLE_NAME}.hex" 
+    add_custom_target( objcopy ALL
+                        COMMAND ${MSP430_OBJCOPY} -O ihex -R .eeprom  "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"  "${MSP430_EXECUTABLE_NAME}.hex"
                         DEPENDS "${MSP430_EXECUTABLE_NAME}"
                         COMMENT "copy elf to hex..." VERBATIM
                         )
@@ -64,22 +66,28 @@ endmacro(add_objcopy_target)
 
 
 macro(add_objsize_target)
-    add_custom_target( objsize ALL 
+    add_custom_target( objsize ALL
                         COMMAND ${MSP430_SIZE_TOOL} "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"  "${MSP430_EXECUTABLE_NAME}.hex"
                         DEPENDS objcopy
                         COMMENT "Target size :" VERBATIM
                         )
 endmacro(add_objsize_target)
 
-# objdump -dSt leds.elf >leds.lst
 
 macro(add_objdump_target)
-#     add_custom_command( OUTPUT ${CMAKE_BINARY_DIR}/${MSP430_EXECUTABLE_NAME}.lst
-#                         COMMAND ${MSP430_OBJDUMP_TOOL} -d St "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}"
-#                         DEPENDS ${MSP430_EXECUTABLE_NAME})
-    add_custom_target( objdump ALL 
+    add_custom_target( objdump ALL
                         COMMAND ${MSP430_OBJDUMP} -dSt "${MSP430_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}" > ${MSP430_EXECUTABLE_NAME}.lst
                         DEPENDS objcopy
                         COMMENT "Add code dump " VERBATIM)
 endmacro(add_objdump_target)
-  
+
+# TODO : factoriser le type de carte
+macro(add_upload)
+    add_custom_target( upload
+                        COMMAND ${MSP_DEBUG} rf2500 "prog ${MSP430_EXECUTABLE_NAME}.hex"
+                        DEPENDS objdump
+                        COMMENT "upload... " VERBATIM)
+endmacro(add_upload)
+
+
+
