@@ -1,5 +1,5 @@
 #include <msp430.h>
-#include %{APPNAMELC}.h
+#include "%{APPNAMELC}.h"
 
 void setup()
 {
