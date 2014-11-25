@@ -1,16 +1,16 @@
 /**
  * <LICENCE>
  *
- * 
+ *
  */
- #ifndef %{APPNAMELC}
- #define %{APPNAMELC}
- 
+ #ifndef %{APPNAMEUC}_H
+ #define %{APPNAMEUC}_H
+
  void setup();
- 
+
  void loop();
- 
- #endif // %{APPNAMELC}
+
+ #endif // %{APPNAMEUC}
 
 
 
